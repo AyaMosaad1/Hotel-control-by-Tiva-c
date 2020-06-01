@@ -1,0 +1,9 @@
+--cpu=Cortex-M4.fp.sp
+".\objects\startup_tm4c123.o"
+".\objects\main.o"
+".\objects\keypad.o"
+".\objects\uart.o"
+--strict --scatter ".\Objects\main.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\main.map" -o .\Objects\main.axf
