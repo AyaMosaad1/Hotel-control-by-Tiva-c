@@ -1,19 +1,6 @@
 #include "UART.h"
 
 void UART_INIT(void){
-	SYSCTL_RCGCUART_R |= 0x0002;    //activate UART1
-	SYSCTL_RCGCGPIO_R |= 0x0002;    //activate port B
-	UART1_CTL_R &= ~0x0001;         
-	UART1_IBRD_R=104;               // for 9600 baudrate and clk=16 MHZ
-	UART1_FBRD_R=11;
-	UART1_LCRH_R = 0x0070;          //8 bits length & 1 stop bit & FIFO 16 bits
-	UART1_CTL_R = 0x0301;           //enable RXE and TXE
-	GPIO_PORTB_AFSEL_R |= 0x03;
-	GPIO_PORTB_PCTL_R = (GPIO_PORTB_PCTL_R&0xFFFFFF00) + 0x00000011;
-	GPIO_PORTB_DEN_R |= 0x03;         //B0 and B1
-	GPIO_PORTB_AMSEL_R &= ~0x03;      //Not analog in  port B
-
-/*	
 SYSCTL_RCGCUART_R |= 0x0001; // activate UART0
 SYSCTL_RCGCGPIO_R |= 0x0001; // activate port A
 UART0_CTL_R &= ~0x0001; // disable UART
@@ -21,11 +8,10 @@ UART0_IBRD_R = 27; // IBRD=int(50000000/(16*115,200)) = int(27.1267)
 UART0_FBRD_R = 8; // FBRD = round(0.1267 * 64) = 8
 UART0_LCRH_R = 0x0070; // 8-bit word length, enable FIFO
 UART0_CTL_R = 0x0301; // enable RXE, TXE and UART
-GPIO_PORTA_PCTL_R = (GPIO_PORTA_PCTL_R&0xFFFFFF00)+0x00000011; // UART
-GPIO_PORTA_AMSEL_R &= ~0x03; // disable analog function on PA1-0
-GPIO_PORTA_AFSEL_R |= 0x03; // enable alt funct on PA1-0
-GPIO_PORTA_DEN_R |= 0x03; // enable digital I/O on PA1-0
-*/
+GPIO_PORTA_PCTL_R = (GPIO_PORTA_PCTL_R&0xFFFFFF00)+0x00000011; 
+GPIO_PORTA_AMSEL_R &= ~0x03; // disable analog
+GPIO_PORTA_AFSEL_R |= 0x03; // enable alt 
+GPIO_PORTA_DEN_R |= 0x03; // enable digital 
 }
 
 void UART_TransmitChar(unsigned char D ){
@@ -37,7 +23,6 @@ unsigned char UART_ReceiveChar(void){
 	while((UART1_FR_R&UART_FR_RXFE) !=0);  
 	return UART1_DR_R;	
 }
-
 
 void UART_TransmitString(char* str){
 	int i = 0 ;
